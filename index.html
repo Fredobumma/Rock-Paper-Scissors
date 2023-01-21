@@ -4,37 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>GameFred</title>
+    <title>Rock-Paper-Scissors by GameFred</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
   	<header>
-  		<h1>Rock, Paper, Scissors</h1>
+  		<h1 class="heading">Rock, Paper, Scissors</h1>
   	</header>
   	<section>
   		<p>Pick one</p>
-		  <div class="input-options">🪨</div>
-  		<div class="input-options">📃</div>
-  		<div class="input-options">✂️</div>
+  		<div class="input-container">
+		  	<div class="input-options"></div>
+  			<div class="input-options"></div>
+  			<div class="input-options"></div>
+  		</div>
 	  </section>
 	  <section>
-		 <div>
-			<p>You</p>
-			<p>vs</p>
-			<p>Comp</p>
+		 <div class="players-container">
+			<p class="player">You</p>
+			<p class="versus">vs</p>
+			<p class="player">Comp</p>
 		 </div>
-		<div>
-			<div></div>
-			<div></div>
+		<div class="selection-container">
+			<div class="selection"></div>
+			<div class="selection"></div>
 		</div>
 	  </section>
 	<section>
-		<p></p>
-		<button></button>
+		<p class="result">You win </p>
+		<button class="new-game">Play Again</button>
 	</section>
-	<footer>
+	<footer class="footer">
 		<p>Created by Manfred Obumma.</p>
-		<p>&copy; GameFred&trade; 2023</p>
+		<p>GameFred&trade; 2023 &copy;</p>
 	</footer>
 	<script src="index.js"></script>
   </body>
