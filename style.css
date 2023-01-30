@@ -63,25 +63,30 @@ p {
   border: 1px solid black;
   border-radius: 5rem;
   font-size: 5rem;
+  height: 4.7rem;
   margin: 1.5rem 0 7rem;
+  width: 4.5rem;
   padding: 2rem;
 }
 
-.result {
+#result {
   background-color: lightgray;
   border-radius: 0.1rem;
-  font-sizev 2.5rem;
+  display: none;
+  font-size: 2.5rem;
   margin: 0 auto 2.5rem;
   padding: 1rem 2rem;
   width: fit-content;
 } 
 
-.new-game {
+#new-game {
   background-color: blue;
   border: 0;
   border-radius: 0.5rem;
   color: white;
+  display: none;
   font-size: 1.4rem;
+  margin: 0 auto;
   padding: 1rem 2rem;
 }
 
