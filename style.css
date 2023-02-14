@@ -11,7 +11,7 @@ html {
 body {
   font-size: 1.6rem;
   margin: 0 auto;
-  max-width: 500px;
+  max-width: 50rem;
   padding: 0 1.5rem;
   position: relative;
   text-align: center;
@@ -23,7 +23,7 @@ p {
 
 .heading {
   color: blue;
-  margin: 5rem 0 4rem;
+  margin: 8rem 0 4rem;
 }
 
 .input-container {
@@ -112,4 +112,147 @@ p {
   gap: 0.5rem;
   justify-content: center;
   margin: 0.5rem 0 3rem;
+}
+
+/* NAVBAR */
+details {
+  margin: 2rem;
+  position: relative;
+}
+
+details::after {
+  background-image: url("images/gamefred-w-text.png");
+  background-position: center;
+  background-size: 15rem 5rem;
+  bottom: 0;
+  content: "";
+  display: inline-block;
+  height: 5rem;
+  position: absolute;
+  right: 0;
+  width: 15rem;
+}
+
+summary {
+  background-color: #dcdcdc;
+  border: 2px solid #555555;
+  border-radius: 4px;
+  color: #555555;
+  cursor: pointer;
+  height: 1.7rem;
+  outline: none;
+  padding: 1.2rem 1rem;
+  position: relative;
+  text-align: center;
+  transition: transform 200ms ease-in-out 0s;
+  user-select: none;
+  width: 2.3rem;
+  writing-mode: vertical-lr;
+}
+
+summary::before,
+summary::after {
+  left: 0;
+  position: static;
+  top: 0;
+}
+
+summary::before {
+  content: "";
+}
+
+summary::after {
+  bottom: 0;
+  content: url("images/menu.svg");
+  left: 20%;
+  position: absolute;
+}
+
+summary:hover {
+  transform: scale(1.1);
+}
+
+summary::marker {
+  font-size: 0;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] .menu {
+  animation-name: menuAnim;
+  position: absolute;
+  z-index: 9999;
+}
+
+details[open] summary {
+  position: relative;
+}
+
+details[open] summary::before {
+  bottom: 0;
+  content: url("images/cancel.svg");
+  left: 20%;
+  position: absolute;
+}
+
+details[open] summary::after {
+  content: "";
+}
+
+.menu {
+  animation: closeMenu 300ms ease-in-out forwards;
+  background-color: #000000;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px 0 rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.menu a {
+  border-bottom: 2px solid #fff;
+  color: #fff;
+  margin: 0 1.6rem;
+  padding: 1.2rem 2.4rem;
+  text-align: center;
+  text-decoration: none;
+  transition: filter 200ms linear 0s;
+}
+
+.menu a:nth-last-of-type(1) {
+  border-bottom: none;
+}
+
+.menu a:hover {
+  filter: brightness(200%);
+}
+
+details[open]::before {
+  animation: fadeMe 300ms linear forwards;
+}
+
+@keyframes menuAnim {
+  0% {
+    height: 0;
+  }
+
+  100% {
+    height: fit-content;
+  }
+}
+
+@keyframes fadeMe {
+  0% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
