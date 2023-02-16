@@ -400,3 +400,19 @@ aside a:active {
   color: #8c8c8c;
   text-decoration-color: #000000;
 }
+
+/* NOT FOUND  */
+.not-found {
+  background-color: red;
+  color: white;
+  font-size: 10rem;
+  margin: 8rem auto 3rem;
+  padding: 0 4rem;
+  width: fit-content;
+}
+
+.not-found-text {
+  font-size: 3rem;
+  font-weight: 600;
+  padding-bottom: 18rem;
+}
