@@ -362,7 +362,7 @@ details[open]::before {
 }
 
 .input:focus ~ .placeholder {
-  color: #b6183b;
+  color: #a70024;
 }
 
 .submit {
