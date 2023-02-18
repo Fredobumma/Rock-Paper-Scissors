@@ -129,7 +129,7 @@ details {
 }
 
 details::after {
-  background-image: url("images/gamefred-w-text.png");
+  background-image: url("images/full-logo.png");
   background-position: center;
   background-size: 15rem 5rem;
   bottom: 0;
