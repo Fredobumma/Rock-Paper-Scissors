@@ -58,9 +58,9 @@ export function Login() {
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
-  <p><a href="">Forgot Password?</a></p>
-  <p><a href="">Don't have an account? Register!</a></p>
-  <p><a href="">Play as guest...</a></p>
+  <p><a href="/reset-password">Forgot Password?</a></p>
+  <p><a href="/register">Don't have an account? Register!</a></p>
+  <p><a href="/">Play as guest...</a></p>
 </aside>`;
 }
 
@@ -104,8 +104,8 @@ export function Register() {
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
-  <p><a href="">Already have an account? Login!</a></p>
-  <p><a href="">Play as guest...</a></p>
+  <p><a href="/login">Already have an account? Login!</a></p>
+  <p><a href="/">Play as guest...</a></p>
 </aside>`;
 }
 
@@ -136,19 +136,19 @@ export function ResetPassword() {
   </div>
   <div class="input-container ic2">
     <input
-      id="password"
+      id="repeat-password"
       class="input"
       type="password"
       placeholder=" "
       autocomplete="new-password"
     />
     <div class="cut"></div>
-    <label for="password" class="placeholder">Repeat New Password</label>
+    <label for="repeat-password" class="placeholder">Repeat Password</label>
   </div>
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
-  <p><a href="">Go back</a></p>
+  <p><a onclick='history.back()'>Go back</a></p>
 </aside>`;
 }
 

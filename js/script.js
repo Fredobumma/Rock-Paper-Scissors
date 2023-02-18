@@ -8,13 +8,9 @@ import {
 
 window.onload = function () {
   // <----------- IMPLEMENTING ROUTING -------------->
-  const route = (event) => {
-    event = event || window.event;
-    event.preventDefault();
-    window.history.pushState({}, "", event.target.href);
-    handleLocation();
-  };
-
+  //variables
+  const links = document.getElementsByTagName("a");
+  console.log(links);
   const routes = {
     "/": Home(),
     "/login": Login(),
@@ -23,16 +19,25 @@ window.onload = function () {
     "/not-found": NotFound(),
   };
 
+  //functions for different operations
+  const route = (event) => {
+    event = event || window.event;
+    // event.preventDefault();
+    window.history.pushState({}, "", event.target.href);
+    handleLocation();
+  };
+
   const handleLocation = async () => {
     const path = window.location.pathname;
     const route = routes[path] || routes["/not-found"];
+    !routes[path] && window.history.pushState({}, "", "/not-found");
     document.getElementById("main-page").innerHTML = route;
   };
+  handleLocation();
 
   //event listener
   window.onpopstate = handleLocation;
-  window.route = route;
-  handleLocation();
+  Array.from(links).map((m) => m.addEventListener("click", route));
 
   // <-------------- IMPLEMENTING NAVBAR ------------->
   //variables
@@ -49,37 +54,28 @@ window.onload = function () {
 
   // <--------------- IMPLEMENTING GAME HOMEPAGE -------------->
   //variables
-  const inputOptions = document.getElementsByClassName("input-options");
-  const options = Object.entries(inputOptions);
-  const inputSelection = document.getElementsByClassName("selection");
-  const selections = Object.entries(inputSelection).map(
-    (selection) => selection[1]
-  );
-  const playerOne = selections[0];
-  const playerTwo = selections[1];
+  const options = document.getElementsByClassName("input-options");
+  const [playerOne, playerTwo] = document.getElementsByClassName("selection");
   const result = document.getElementById("result");
   const newGame = document.getElementById("new-game");
 
-  //functions for operations
-  const comp = (optionValues) =>
-    optionValues[Math.floor(Math.random() * optionValues.length)];
-
+  //functions for different operations
   const gameResult = (optionValues) => {
-    const you = playerOne.innerText;
-    const computer = playerTwo.innerText;
+    const you = playerOne.innerHTML;
+    const comp = playerTwo.innerHTML;
 
     if (
-      (you === optionValues[0] && computer === optionValues[0]) ||
-      (you === optionValues[1] && computer === optionValues[1]) ||
-      (you === optionValues[2] && computer === optionValues[2])
+      (you === optionValues[0] && comp === optionValues[0]) ||
+      (you === optionValues[1] && comp === optionValues[1]) ||
+      (you === optionValues[2] && comp === optionValues[2])
     ) {
       result.style.color = "gray";
       return "It's a tie!";
     }
     if (
-      (you === optionValues[0] && computer === optionValues[1]) ||
-      (you === optionValues[1] && computer === optionValues[2]) ||
-      (you === optionValues[2] && computer === optionValues[0])
+      (you === optionValues[0] && comp === optionValues[1]) ||
+      (you === optionValues[1] && comp === optionValues[2]) ||
+      (you === optionValues[2] && comp === optionValues[0])
     ) {
       result.style.color = "red";
       return "You Lose 😪";
@@ -88,25 +84,30 @@ window.onload = function () {
     return "You Win 😁";
   };
 
+  const computer = (optionValues) =>
+    optionValues[Math.floor(Math.random() * optionValues.length)];
+
+  const optionPick = (option) => {
+    if (playerOne.innerHTML) return null;
+
+    const optionsArray = Array.from(options).map((opt) => opt.innerHTML);
+    playerOne.innerHTML = option.innerHTML;
+    playerTwo.innerHTML = computer(optionsArray);
+    result.innerText = gameResult(optionsArray);
+    result.classList.add("show-results");
+    newGame.classList.add("show-results");
+  };
+
+  const resetGame = () => {
+    playerOne.innerHTML = "";
+    playerTwo.innerHTML = "";
+    result.classList.remove("show-results");
+    newGame.classList.remove("show-results");
+  };
+
   //event listener
-  options.map((option) =>
-    option[1].addEventListener("click", function () {
-      if (playerOne.innerText) return null;
-
-      const optionsArray = options.map((option) => option[1].innerText);
-      playerOne.innerText = option[1].innerText;
-      playerTwo.innerText = comp(optionsArray);
-      result.innerText = gameResult(optionsArray);
-      result.style.display = "block";
-      newGame.style.display = "block";
-    })
+  Array.from(options).map((option) =>
+    option.addEventListener("click", () => optionPick(option))
   );
-
-  newGame &&
-    newGame.addEventListener("click", function () {
-      playerOne.innerText = "";
-      playerTwo.innerText = "";
-      result.style.display = "none";
-      newGame.style.display = "none";
-    });
+  newGame && newGame.addEventListener("click", resetGame);
 };

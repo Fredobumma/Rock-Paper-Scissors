@@ -93,9 +93,15 @@ p {
   background-color: blue;
   border: 0;
   border-radius: 0.5rem;
+  cursor: pointer;
   color: white;
   font-size: 1.4rem;
   margin: 0 auto;
+}
+
+#result.show-results,
+#new-game.show-results {
+  display: block;
 }
 
 .footer {
@@ -281,7 +287,7 @@ details[open]::before {
   border-radius: 20px;
   box-sizing: border-box;
   height: fit-content;
-  margin: 0 auto 3rem;
+  margin: 0 auto 5rem;
   max-width: 300px;
   padding: 20px;
 }
@@ -316,8 +322,8 @@ details[open]::before {
 
 .input {
   background-color: #151517;
-  border-radius: 12px;
   border: 0;
+  border-radius: 12px;
   box-sizing: border-box;
   color: #eee;
   font-size: 18px;
@@ -399,6 +405,7 @@ aside {
 
 aside a {
   color: #000000;
+  text-decoration: underline;
   text-underline-offset: 0.5rem;
 }
 
@@ -411,7 +418,7 @@ aside a:active {
 
 /* NOT FOUND  */
 .not-found {
-  background-color: #e60032;
+  background-color: rgb(185, 27, 27);
   color: white;
   font-size: 10rem;
   margin: 0 auto 3rem;
