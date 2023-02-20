@@ -10,7 +10,7 @@ window.onload = function () {
   // <----------- IMPLEMENTING ROUTING -------------->
   //variables
   const links = document.getElementsByTagName("a");
-  console.log(links);
+
   const routes = {
     "/": Home(),
     "/login": Login(),
