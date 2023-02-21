@@ -2,17 +2,27 @@ import {
   createUserWithEmailAndPassword,
   // onAuthStateChanged,
   signInWithEmailAndPassword,
+  updatePassword,
 } from "firebase/auth";
 import { auth } from "./httpService";
 
-const token = async () => await auth.currentUser.getIdToken(true);
+// const user = auth;
+const tokenKey = "token";
 
-const signUp = async (email, password) =>
-  await createUserWithEmailAndPassword(auth, email, password);
+const getJwt = () => localStorage.getItem(tokenKey);
 
-const signIn = async (email, password) =>
-  await signInWithEmailAndPassword(auth, email, password);
+const loginWithJwt = (value) => localStorage.setItem(tokenKey, value);
 
+// const token = async () => await auth.currentUser.getIdToken(true);
+
+const signUp = (email, password) =>
+  createUserWithEmailAndPassword(auth, email, password);
+
+const signIn = (email, password) =>
+  signInWithEmailAndPassword(auth, email, password);
+
+const resetPassword = (newPassword) =>
+  updatePassword(auth.currentUser, newPassword);
 // const onAuthChange = onAuthStateChanged(auth, (user) => user);
 
-export { token, signUp, signIn };
+export { signUp, signIn, resetPassword, getJwt, loginWithJwt };

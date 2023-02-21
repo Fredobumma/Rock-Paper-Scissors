@@ -30,19 +30,19 @@ export function Home() {
 }
 
 export function Login() {
-  return `<form class="form">
+  return `<form class="form sign-in">
   <div class="title">Welcome</div>
   <div class="subtitle">Login to play!</div>
   <div class="input-container ic1">
     <input
-      id="username"
+      id="email"
       class="input"
       type="text"
       placeholder=" "
-      autocomplete="username"
+      autocomplete="email"
     />
     <div class="cut"></div>
-    <label for="username" class="placeholder">Username</label>
+    <label for="email" class="placeholder">Email</label>
   </div>
   <div class="input-container ic2">
     <input
@@ -65,7 +65,7 @@ export function Login() {
 }
 
 export function Register() {
-  return `<form class="form">
+  return `<form class="form sign-up">
   <div class="title">Welcome</div>
   <div class="subtitle">Create an account to play!</div>
   <div class="input-container ic1">
@@ -110,18 +110,18 @@ export function Register() {
 }
 
 export function ResetPassword() {
-  return `<form class="form">
+  return `<form class="form reset-password">
   <div class="subtitle">Reset Password</div>
   <div class="input-container ic1">
     <input
-      id="username"
+      id="email"
       class="input"
       type="text"
       placeholder=" "
-      autocomplete="username"
+      autocomplete="email"
     />
     <div class="cut"></div>
-    <label for="username" class="placeholder">Username</label>
+    <label for="email" class="placeholder">Email</label>
   </div>
   <div class="input-container ic2">
     <input

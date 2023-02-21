@@ -1,4 +1,11 @@
 import {
+  signUp,
+  signIn,
+  getJwt as auth,
+  // resetPassword,
+  loginWithJwt,
+} from "./services/authService";
+import {
   Home,
   Login,
   Register,
@@ -110,4 +117,46 @@ window.onload = function () {
     option.addEventListener("click", () => optionPick(option))
   );
   newGame && newGame.addEventListener("click", resetGame);
+
+  // <-------------- IMPLEMENTING AUTH ---------------->
+  //variables;
+  const form = document.getElementsByClassName("form")[0];
+
+  const callServer = [
+    {
+      id: "sign-up",
+      getUser: (target) =>
+        signUp(target[1].value, target[2].value, target[0].value),
+    },
+    {
+      id: "sign-in",
+      getUser: (target) => signIn(target[0].value, target[1].value),
+    },
+  ];
+
+  //functions for different operations
+  const submit = async (event) => {
+    event.preventDefault();
+    let currentUser = {};
+    const { target } = event;
+
+    try {
+      const { user } = await callServer
+        .find((el) => form.classList.contains(el.id))
+        .getUser(target);
+      if (form.classList.contains("sign-up")) {
+        user.displayName = target[0].value;
+        user.password = target[2].value;
+      }
+      currentUser = user;
+      loginWithJwt(user.accessToken);
+      window.history.replaceState({}, "", "/");
+      document.getElementById("main-page").innerHTML = routes["/"];
+    } catch (error) {
+      console.log(error.code);
+    }
+  };
+
+  //event listener
+  form && form.addEventListener("submit", submit);
 };

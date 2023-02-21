@@ -2,9 +2,9 @@
   "name": "rock-paper-scissors",
   "description": "Building a simple web game (Rock, Paper, Scissors)\r Retrying my skills at Html, Vanilla Css and Vanilla JavaScript after a long time with react.",
   "version": "1.0.0",
-  "main": "index.js",
+  "source": "./index.html",
   "scripts": {
-    "start": "parcel index.html --public-url /",
+    "start": "parcel",
     "build": "parcel build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,8 @@
     "process": "^0.11.10"
   },
   "dependencies": {
+    "@parcel/node-resolver-core": "^2.8.3",
     "firebase": "^9.17.1"
-  }
+  },
+  "main": "index.js"
 }
