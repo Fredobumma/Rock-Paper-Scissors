@@ -3,6 +3,7 @@ import {
   // onAuthStateChanged,
   signInWithEmailAndPassword,
   updatePassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "./httpService";
 
@@ -21,8 +22,19 @@ const signUp = (email, password) =>
 const signIn = (email, password) =>
   signInWithEmailAndPassword(auth, email, password);
 
-const resetPassword = (newPassword) =>
-  updatePassword(auth.currentUser, newPassword);
+const passwordUpdate = (currentUser, newPassword) =>
+  updatePassword(currentUser, newPassword);
+
+const userUpdate = (currentUser, newUserObj) =>
+  updateProfile(currentUser, newUserObj);
 // const onAuthChange = onAuthStateChanged(auth, (user) => user);
 
-export { signUp, signIn, resetPassword, getJwt, loginWithJwt };
+export {
+  signUp,
+  signIn,
+  passwordUpdate,
+  userUpdate,
+  getJwt,
+  loginWithJwt,
+  auth,
+};

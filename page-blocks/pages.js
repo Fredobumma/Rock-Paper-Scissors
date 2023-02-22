@@ -110,7 +110,7 @@ export function Register() {
 }
 
 export function ResetPassword() {
-  return `<form class="form reset-password">
+  return `<form class="form sign-in reset-password">
   <div class="subtitle">Reset Password</div>
   <div class="input-container ic1">
     <input
@@ -129,21 +129,21 @@ export function ResetPassword() {
       class="input"
       type="password"
       placeholder=" "
-      autocomplete="new-password"
+      autocomplete="current-password"
     />
     <div class="cut"></div>
-    <label for="password" class="placeholder">New Password</label>
+    <label for="password" class="placeholder">Current Password</label>
   </div>
   <div class="input-container ic2">
     <input
-      id="repeat-password"
+      id="new-password"
       class="input"
       type="password"
       placeholder=" "
       autocomplete="new-password"
     />
     <div class="cut"></div>
-    <label for="repeat-password" class="placeholder">Repeat Password</label>
+    <label for="repeat-password" class="placeholder">New Password</label>
   </div>
   <button type="submit" class="submit">submit</button>
 </form>

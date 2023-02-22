@@ -1,8 +1,9 @@
 import {
   signUp,
   signIn,
-  getJwt as auth,
-  // resetPassword,
+  getJwt as authUser,
+  passwordUpdate,
+  userUpdate,
   loginWithJwt,
 } from "./services/authService";
 import {
@@ -122,41 +123,77 @@ window.onload = function () {
   //variables;
   const form = document.getElementsByClassName("form")[0];
 
-  const callServer = [
+  const formTypes = [
     {
       id: "sign-up",
-      getUser: (target) =>
+      getAuthService: (target) =>
         signUp(target[1].value, target[2].value, target[0].value),
     },
     {
       id: "sign-in",
-      getUser: (target) => signIn(target[0].value, target[1].value),
+      getAuthService: (target) => signIn(target[0].value, target[1].value),
     },
   ];
 
   //functions for different operations
-  const submit = async (event) => {
+  const callServer = async (event) => {
     event.preventDefault();
-    let currentUser = {};
+    let currentUser;
     const { target } = event;
 
     try {
-      const { user } = await callServer
+      const { user } = await formTypes
         .find((el) => form.classList.contains(el.id))
-        .getUser(target);
-      if (form.classList.contains("sign-up")) {
-        user.displayName = target[0].value;
-        user.password = target[2].value;
-      }
+        .getAuthService(target);
+
       currentUser = user;
-      loginWithJwt(user.accessToken);
-      window.history.replaceState({}, "", "/");
-      document.getElementById("main-page").innerHTML = routes["/"];
     } catch (error) {
       console.log(error.code);
+      return;
     }
+
+    if (form.classList.contains("sign-up")) {
+      try {
+        await userUpdate(currentUser, { displayName: target[0].value });
+      } catch (error) {
+        console.log(error.code);
+        return;
+      }
+    }
+
+    loginWithJwt(currentUser.accessToken);
+    return currentUser;
+  };
+
+  const submit = async (event) => {
+    const user = await callServer(event);
+    if (!user) return;
+
+    window.history.replaceState({}, "", "/");
+    document.getElementById("main-page").innerHTML = routes["/"];
+  };
+
+  const update = async (event) => {
+    const { target } = event;
+
+    try {
+      const user = await callServer(event);
+      if (!user) return;
+
+      user.password = target[2].value;
+      await passwordUpdate(user, target[2].value);
+    } catch (error) {
+      console.log(error.code);
+      return;
+    }
+
+    window.history.back();
   };
 
   //event listener
-  form && form.addEventListener("submit", submit);
+  form &&
+    form.addEventListener(
+      "submit",
+      form.classList.contains("reset-password") ? update : submit
+    );
 };
