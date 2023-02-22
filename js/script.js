@@ -3,14 +3,16 @@ import {
   signIn,
   getJwt as authUser,
   passwordUpdate,
-  userUpdate,
+  updateUser,
   loginWithJwt,
+  logoutJwt,
 } from "./services/authService";
 import {
   Home,
   Login,
   Register,
   ResetPassword,
+  deleteCurrentUser,
   NotFound,
 } from "../page-blocks/pages.js";
 
@@ -24,6 +26,7 @@ window.onload = function () {
     "/login": Login(),
     "/register": Register(),
     "/reset-password": ResetPassword(),
+    "/delete-account": deleteCurrentUser(),
     "/not-found": NotFound(),
   };
 
@@ -125,12 +128,12 @@ window.onload = function () {
 
   const formTypes = [
     {
-      id: "sign-up",
+      nameId: "sign-up",
       getAuthService: (target) =>
         signUp(target[1].value, target[2].value, target[0].value),
     },
     {
-      id: "sign-in",
+      nameId: "sign-in",
       getAuthService: (target) => signIn(target[0].value, target[1].value),
     },
   ];
@@ -143,7 +146,7 @@ window.onload = function () {
 
     try {
       const { user } = await formTypes
-        .find((el) => form.classList.contains(el.id))
+        .find((el) => form.classList.contains(el.nameId))
         .getAuthService(target);
 
       currentUser = user;
@@ -154,7 +157,7 @@ window.onload = function () {
 
     if (form.classList.contains("sign-up")) {
       try {
-        await userUpdate(currentUser, { displayName: target[0].value });
+        await updateUser(currentUser, { displayName: target[0].value });
       } catch (error) {
         console.log(error.code);
         return;
@@ -165,7 +168,7 @@ window.onload = function () {
     return currentUser;
   };
 
-  const submit = async (event) => {
+  const sign_Up_In = async (event) => {
     const user = await callServer(event);
     if (!user) return;
 
@@ -173,14 +176,14 @@ window.onload = function () {
     document.getElementById("main-page").innerHTML = routes["/"];
   };
 
-  const update = async (event) => {
+  const changePassword = async (event) => {
     const { target } = event;
 
     try {
       const user = await callServer(event);
       if (!user) return;
 
-      user.password = target[2].value;
+      // user.password = target[2].value;
       await passwordUpdate(user, target[2].value);
     } catch (error) {
       console.log(error.code);
@@ -190,10 +193,35 @@ window.onload = function () {
     window.history.back();
   };
 
+  const deleteAccount = async (event) => {
+    event.preventDefault();
+
+    try {
+      const user = await callServer(event);
+      if (!user) return;
+      if (user.accessToken !== authUser())
+        return console.log("Wrong account credentials");
+
+      await user.delete();
+      logoutJwt();
+    } catch (error) {
+      console.log(error.code);
+      return;
+    }
+
+    window.history.replaceState({}, "", "/register");
+    document.getElementById("main-page").innerHTML = routes["/register"];
+  };
+
   //event listener
+  const eventListeners = [
+    { nameId: "reset-password", func: changePassword },
+    { nameId: "delete-account", func: deleteAccount },
+  ];
+  const listener = eventListeners.find((el) =>
+    form.classList.contains(el.nameId)
+  );
+
   form &&
-    form.addEventListener(
-      "submit",
-      form.classList.contains("reset-password") ? update : submit
-    );
+    form.addEventListener("submit", (listener && listener.func) || sign_Up_In);
 };

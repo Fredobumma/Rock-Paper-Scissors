@@ -152,6 +152,40 @@ export function ResetPassword() {
 </aside>`;
 }
 
+export function deleteCurrentUser() {
+  return `<div class="deletion-question">This action is irreversible!!!</div>
+  <div class="deletion-question">Are you sure you wish to delete your account?</div>
+  <form class="form sign-in delete-account">
+  <div class="subtitle">Delete Account</div>
+  <div class="input-container ic1">
+    <input
+      id="email"
+      class="input"
+      type="text"
+      placeholder=" "
+      autocomplete="email"
+    />
+    <div class="cut"></div>
+    <label for="email" class="placeholder">Email</label>
+  </div>
+  <div class="input-container ic2">
+    <input
+      id="password"
+      class="input"
+      type="password"
+      placeholder=" "
+      autocomplete="current-password"
+    />
+    <div class="cut"></div>
+    <label for="password" class="placeholder">Password</label>
+  </div>
+  <button type="submit" class="submit">DELETE ACCOUNT</button>
+</form>
+<aside>
+  <p><a onclick='history.back()'>Go back</a></p>
+</aside>`;
+}
+
 export function NotFound() {
   return `<h1 class="not-found">404</h1>
 <p class="not-found-text">Page Not Found</p>`;
