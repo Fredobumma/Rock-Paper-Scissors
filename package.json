@@ -16,6 +16,7 @@
     "@parcel/css": "^1.14.0",
     "@parcel/transformer-css": "^2.8.3",
     "cssnano": "^5.1.15",
+    "lightningcss": "^1.19.0",
     "parcel": "^2.8.3",
     "postcss": "^8.4.21",
     "process": "^0.11.10"
