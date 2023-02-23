@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@parcel/node-resolver-core": "^2.8.3",
+    "@parcel/transformer-css": "^2.8.3",
     "firebase": "^9.17.1"
-  },
-  "main": "index.js"
+  }
 }
