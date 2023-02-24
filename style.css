@@ -403,7 +403,8 @@ aside {
   gap: 2rem;
 }
 
-aside a {
+aside a,
+.back-button {
   color: #000000;
   text-decoration: underline;
   text-underline-offset: 0.5rem;
@@ -411,7 +412,10 @@ aside a {
 
 aside a:hover,
 aside a:focus,
-aside a:active {
+aside a:active,
+.back-button:hover,
+.back-button:focus,
+.back-button:active {
   color: #8c8c8c;
   text-decoration-color: #000000;
 }

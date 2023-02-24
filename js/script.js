@@ -20,7 +20,7 @@ window.onload = function () {
   // <----------- IMPLEMENTING ROUTING -------------->
   //variables
   const links = document.getElementsByTagName("a");
-
+  const backButton = document.getElementsByClassName("back-button");
   const routes = {
     "/": Home(),
     "/login": Login(),
@@ -33,12 +33,13 @@ window.onload = function () {
   //functions for different operations
   const route = (event) => {
     event = event || window.event;
-    // event.preventDefault();
+    event.preventDefault();
     window.history.pushState({}, "", event.target.href);
+    window.location.reload();
     handleLocation();
   };
 
-  const handleLocation = async () => {
+  const handleLocation = () => {
     const path = window.location.pathname;
     const route = routes[path] || routes["/not-found"];
     !routes[path] && window.history.pushState({}, "", "/not-found");
@@ -46,9 +47,17 @@ window.onload = function () {
   };
   handleLocation();
 
+  const handleBack = () => {
+    window.history.pushState({}, "", "/");
+    window.location.reload();
+  };
+
   //event listener
   window.onpopstate = handleLocation;
-  Array.from(links).map((m) => m.addEventListener("click", route));
+  Array.from(links).map((link) => link.addEventListener("click", route));
+  Array.from(backButton).map((button) =>
+    button.addEventListener("click", handleBack)
+  );
 
   // <-------------- IMPLEMENTING NAVBAR ------------->
   //variables
@@ -124,13 +133,12 @@ window.onload = function () {
 
   // <-------------- IMPLEMENTING AUTH ---------------->
   //variables;
-  const form = document.getElementsByClassName("form")[0];
+  const forms = document.getElementsByClassName("form");
 
   const formTypes = [
     {
       nameId: "sign-up",
-      getAuthService: (target) =>
-        signUp(target[1].value, target[2].value, target[0].value),
+      getAuthService: (target) => signUp(target[1].value, target[2].value),
     },
     {
       nameId: "sign-in",
@@ -140,13 +148,12 @@ window.onload = function () {
 
   //functions for different operations
   const callServer = async (event) => {
-    event.preventDefault();
     let currentUser;
     const { target } = event;
 
     try {
       const { user } = await formTypes
-        .find((el) => form.classList.contains(el.nameId))
+        .find((el) => forms[0].classList.contains(el.nameId))
         .getAuthService(target);
 
       currentUser = user;
@@ -155,7 +162,7 @@ window.onload = function () {
       return;
     }
 
-    if (form.classList.contains("sign-up")) {
+    if (forms[0].classList.contains("sign-up")) {
       try {
         await updateUser(currentUser, { displayName: target[0].value });
       } catch (error) {
@@ -169,6 +176,7 @@ window.onload = function () {
   };
 
   const sign_Up_In = async (event) => {
+    event.preventDefault();
     const user = await callServer(event);
     if (!user) return;
 
@@ -177,6 +185,7 @@ window.onload = function () {
   };
 
   const changePassword = async (event) => {
+    event.preventDefault();
     const { target } = event;
 
     try {
@@ -218,10 +227,11 @@ window.onload = function () {
     { nameId: "reset-password", func: changePassword },
     { nameId: "delete-account", func: deleteAccount },
   ];
-  const listener = eventListeners.find((el) =>
-    form.classList.contains(el.nameId)
-  );
 
-  form &&
-    form.addEventListener("submit", (listener && listener.func) || sign_Up_In);
+  Array.from(forms).forEach((form) => {
+    const listener = eventListeners.find((el) =>
+      form.classList.contains(el.nameId)
+    );
+    form.addEventListener("submit", listener ? listener.func : sign_Up_In);
+  });
 };

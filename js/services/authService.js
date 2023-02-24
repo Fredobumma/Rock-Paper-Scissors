@@ -1,6 +1,5 @@
 import {
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
   updatePassword,
   updateProfile,
@@ -15,8 +14,6 @@ const getJwt = () => localStorage.getItem(tokenKey);
 const loginWithJwt = (value) => localStorage.setItem(tokenKey, value);
 
 const logoutJwt = () => localStorage.removeItem(tokenKey);
-
-// const token = async () => await auth.currentUser.getIdToken(true);
 
 const signUp = (email, password) =>
   createUserWithEmailAndPassword(auth, email, password);

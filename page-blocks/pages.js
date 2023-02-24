@@ -148,7 +148,7 @@ export function ResetPassword() {
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
-  <p><a onclick='history.back()'>Go back</a></p>
+  <p class="back-button">Go back</p>
 </aside>`;
 }
 
@@ -182,7 +182,7 @@ export function deleteCurrentUser() {
   <button type="submit" class="submit">DELETE ACCOUNT</button>
 </form>
 <aside>
-  <p><a onclick='history.back()'>Go back</a></p>
+  <p class="back-button">Go back</p>
 </aside>`;
 }
 
