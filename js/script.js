@@ -52,8 +52,13 @@ window.onload = function () {
     window.location.reload();
   };
 
+  const handlePopState = () => {
+    handleLocation();
+    window.location.reload();
+  };
+
   //event listener
-  window.onpopstate = handleLocation;
+  window.onpopstate = handlePopState;
   Array.from(links).map((link) => link.addEventListener("click", route));
   Array.from(backButton).map((button) =>
     button.addEventListener("click", handleBack)
@@ -80,7 +85,7 @@ window.onload = function () {
   const newGame = document.getElementById("new-game");
 
   //functions for different operations
-  const gameResult = (optionValues) => {
+  const handleGameResult = (optionValues) => {
     const you = playerOne.innerHTML;
     const comp = playerTwo.innerHTML;
 
@@ -107,18 +112,18 @@ window.onload = function () {
   const computer = (optionValues) =>
     optionValues[Math.floor(Math.random() * optionValues.length)];
 
-  const optionPick = (option) => {
+  const handleOptionPick = (option) => {
     if (playerOne.innerHTML) return null;
 
     const optionsArray = Array.from(options).map((opt) => opt.innerHTML);
     playerOne.innerHTML = option.innerHTML;
     playerTwo.innerHTML = computer(optionsArray);
-    result.innerText = gameResult(optionsArray);
+    result.innerText = handleGameResult(optionsArray);
     result.classList.add("show-results");
     newGame.classList.add("show-results");
   };
 
-  const resetGame = () => {
+  const handleGameReset = () => {
     playerOne.innerHTML = "";
     playerTwo.innerHTML = "";
     result.classList.remove("show-results");
@@ -127,14 +132,14 @@ window.onload = function () {
 
   //event listener
   Array.from(options).map((option) =>
-    option.addEventListener("click", () => optionPick(option))
+    option.addEventListener("click", () => handleOptionPick(option))
   );
-  newGame && newGame.addEventListener("click", resetGame);
+  newGame && newGame.addEventListener("click", handleGameReset);
 
   // <-------------- IMPLEMENTING AUTH ---------------->
   //variables;
   const forms = document.getElementsByClassName("form");
-
+  console.log(forms[0]);
   const formTypes = [
     {
       nameId: "sign-up",
@@ -175,7 +180,7 @@ window.onload = function () {
     return currentUser;
   };
 
-  const sign_Up_In = async (event) => {
+  const handleSign_Up_In = async (event) => {
     event.preventDefault();
     const user = await callServer(event);
     if (!user) return;
@@ -232,6 +237,9 @@ window.onload = function () {
     const listener = eventListeners.find((el) =>
       form.classList.contains(el.nameId)
     );
-    form.addEventListener("submit", listener ? listener.func : sign_Up_In);
+    form.addEventListener(
+      "submit",
+      listener ? listener.func : handleSign_Up_In
+    );
   });
 };
