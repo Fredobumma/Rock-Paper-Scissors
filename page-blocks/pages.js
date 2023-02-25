@@ -58,7 +58,7 @@ export function Login() {
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
-  <p><a href="/reset-password">Forgot Password?</a></p>
+  <p><a href="/password-recovery">Forgot Password?</a></p>
   <p><a href="/register">Don't have an account? Register!</a></p>
   <p><a href="/">Play as guest...</a></p>
 </aside>`;
@@ -152,9 +152,31 @@ export function ResetPassword() {
 </aside>`;
 }
 
-export function deleteCurrentUser() {
-  return `<div class="deletion-question">This action is irreversible!!!</div>
-  <div class="deletion-question">Are you sure you wish to delete your account?</div>
+export function RecoverPassword() {
+  return `<div class="recover-password-instructions">Receive an email to recover password</div>
+  <form class="form recover-password">
+  <div class="subtitle">Forgot Password ?</div>
+  <div class="input-container ic1">
+    <input
+      id="email"
+      class="input"
+      type="text"
+      placeholder=" "
+      autocomplete="email"
+    />
+    <div class="cut"></div>
+    <label for="email" class="placeholder">Email</label>
+  </div>
+  <button type="submit" class="submit">Reset Password</button>
+</form>
+<aside>
+  <p class="back-button">Go back</p>
+</aside>`;
+}
+
+export function DeleteCurrentUser() {
+  return `<div class="delete-instructions">This action is irreversible!!!</div>
+  <div class="delete-instructions">Are you sure you wish to delete your account?</div>
   <form class="form sign-in delete-account">
   <div class="subtitle">Delete Account</div>
   <div class="input-container ic1">

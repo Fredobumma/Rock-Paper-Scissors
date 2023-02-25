@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updatePassword,
   updateProfile,
@@ -27,11 +28,14 @@ const passwordUpdate = (currentUser, newPassword) =>
 const updateUser = (currentUser, newUserObj) =>
   updateProfile(currentUser, newUserObj);
 
+const toRecoverPassword = (email) => sendPasswordResetEmail(auth, email);
+
 export {
   signUp,
   signIn,
   passwordUpdate,
   updateUser,
+  toRecoverPassword,
   getJwt,
   loginWithJwt,
   logoutJwt,

@@ -4,6 +4,7 @@ import {
   getJwt as authUser,
   passwordUpdate,
   updateUser,
+  toRecoverPassword,
   loginWithJwt,
   logoutJwt,
 } from "./services/authService";
@@ -12,7 +13,8 @@ import {
   Login,
   Register,
   ResetPassword,
-  deleteCurrentUser,
+  RecoverPassword,
+  DeleteCurrentUser,
   NotFound,
 } from "../page-blocks/pages.js";
 
@@ -26,7 +28,8 @@ window.onload = function () {
     "/login": Login(),
     "/register": Register(),
     "/reset-password": ResetPassword(),
-    "/delete-account": deleteCurrentUser(),
+    "/password-recovery": RecoverPassword(),
+    "/delete-account": DeleteCurrentUser(),
     "/not-found": NotFound(),
   };
 
@@ -186,25 +189,37 @@ window.onload = function () {
     if (!user) return;
 
     window.history.replaceState({}, "", "/");
-    document.getElementById("main-page").innerHTML = routes["/"];
+    window.location.reload();
   };
 
   const changePassword = async (event) => {
     event.preventDefault();
-    const { target } = event;
 
     try {
       const user = await callServer(event);
       if (!user) return;
 
       // user.password = target[2].value;
-      await passwordUpdate(user, target[2].value);
+      await passwordUpdate(user, event.target[2].value);
     } catch (error) {
       console.log(error.code);
       return;
     }
 
     window.history.back();
+  };
+
+  const passwordRecovery = async (event) => {
+    event.preventDefault();
+
+    try {
+      await toRecoverPassword(event.target[0].value);
+    } catch (error) {
+      console.log(error.code);
+    }
+
+    window.history.pushState({}, "", "/login");
+    window.location.reload();
   };
 
   const deleteAccount = async (event) => {
@@ -224,13 +239,14 @@ window.onload = function () {
     }
 
     window.history.replaceState({}, "", "/register");
-    document.getElementById("main-page").innerHTML = routes["/register"];
+    window.location.reload();
   };
 
   //event listener
   const eventListeners = [
     { nameId: "reset-password", func: changePassword },
     { nameId: "delete-account", func: deleteAccount },
+    { nameId: "recover-password", func: passwordRecovery },
   ];
 
   Array.from(forms).forEach((form) => {

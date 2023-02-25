@@ -420,13 +420,14 @@ aside a:active,
   text-decoration-color: #000000;
 }
 
-.deletion-question {
+.delete-instructions,
+.recover-password-instructions {
   font-weight: bolder;
   margin: 0 auto 2rem;
   max-width: 30rem;
 }
 
-.deletion-question:nth-of-type(1) {
+.delete-instructions:nth-of-type(1) {
   color: red;
   margin-bottom: 1rem;
   text-decoration: underline;
