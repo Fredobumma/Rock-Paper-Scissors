@@ -8,6 +8,7 @@ import {
   loginWithJwt,
   logoutJwt,
 } from "./services/authService";
+import { Navbar_guest, Navbar_authUser } from "./../page-blocks/navbar";
 import {
   Home,
   Login,
@@ -21,16 +22,23 @@ import {
 window.onload = function () {
   // <----------- IMPLEMENTING ROUTING -------------->
   //variables
+  const menu = document.getElementsByClassName("menu")[0];
+  menu.innerHTML = authUser ? Navbar_authUser() : Navbar_guest();
+
   const links = document.getElementsByTagName("a");
   const backButton = document.getElementsByClassName("back-button");
+
   const routes = {
-    "/": Home(),
     "/login": Login(),
     "/register": Register(),
-    "/reset-password": ResetPassword(),
     "/password-recovery": RecoverPassword(),
-    "/delete-account": DeleteCurrentUser(),
     "/not-found": NotFound(),
+  };
+
+  const registeredRoutes = {
+    "/": Home(),
+    "/reset-password": ResetPassword(),
+    "/delete-account": DeleteCurrentUser(),
   };
 
   //functions for different operations
@@ -43,9 +51,21 @@ window.onload = function () {
   };
 
   const handleLocation = () => {
-    const path = window.location.pathname;
-    const route = routes[path] || routes["/not-found"];
-    !routes[path] && window.history.pushState({}, "", "/not-found");
+    const pathname = window.location.pathname;
+    const path =
+      !authUser && pathname in registeredRoutes ? "/login" : pathname;
+
+    const route =
+      registeredRoutes[path] || routes[path] || routes["/not-found"];
+
+    const urlPath = route === routes["/not-found"] ? "/not-found" : path;
+
+    if (authUser && !(path in registeredRoutes)) {
+      logoutJwt();
+      window.location.reload();
+    }
+
+    window.history.pushState({}, "", urlPath);
     document.getElementById("main-page").innerHTML = route;
   };
   handleLocation();
@@ -142,7 +162,6 @@ window.onload = function () {
   // <-------------- IMPLEMENTING AUTH ---------------->
   //variables;
   const forms = document.getElementsByClassName("form");
-  console.log(forms[0]);
   const formTypes = [
     {
       nameId: "sign-up",
@@ -153,6 +172,7 @@ window.onload = function () {
       getAuthService: (target) => signIn(target[0].value, target[1].value),
     },
   ];
+  const logOut = document.getElementsByClassName("log-out");
 
   //functions for different operations
   const callServer = async (event) => {
@@ -216,6 +236,7 @@ window.onload = function () {
       await toRecoverPassword(event.target[0].value);
     } catch (error) {
       console.log(error.code);
+      return;
     }
 
     window.history.pushState({}, "", "/login");
@@ -228,7 +249,7 @@ window.onload = function () {
     try {
       const user = await callServer(event);
       if (!user) return;
-      if (user.accessToken !== authUser())
+      if (user.accessToken !== authUser)
         return console.log("Wrong account credentials");
 
       await user.delete();
@@ -239,6 +260,12 @@ window.onload = function () {
     }
 
     window.history.replaceState({}, "", "/register");
+    window.location.reload();
+  };
+
+  const handleLogOut = () => {
+    logoutJwt();
+    window.history.replaceState({}, "", "/login");
     window.location.reload();
   };
 
@@ -258,4 +285,7 @@ window.onload = function () {
       listener ? listener.func : handleSign_Up_In
     );
   });
+  Array.from(logOut).forEach((out) =>
+    out.addEventListener("click", handleLogOut)
+  );
 };

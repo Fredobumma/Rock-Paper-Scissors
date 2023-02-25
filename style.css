@@ -232,6 +232,7 @@ details[open] summary::after {
 .menu a {
   border-bottom: 2px solid #fff;
   color: #fff;
+  cursor: pointer;
   margin: 0 1.6rem;
   padding: 1.2rem 2.4rem;
   text-align: center;
@@ -406,6 +407,7 @@ aside {
 aside a,
 .back-button {
   color: #000000;
+  cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 0.5rem;
 }

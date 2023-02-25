@@ -10,7 +10,7 @@ import { auth } from "./httpService";
 // const user = auth;
 const tokenKey = "token";
 
-const getJwt = () => localStorage.getItem(tokenKey);
+const getJwt = localStorage.getItem(tokenKey);
 
 const loginWithJwt = (value) => localStorage.setItem(tokenKey, value);
 
@@ -31,12 +31,12 @@ const updateUser = (currentUser, newUserObj) =>
 const toRecoverPassword = (email) => sendPasswordResetEmail(auth, email);
 
 export {
+  getJwt,
   signUp,
   signIn,
   passwordUpdate,
   updateUser,
   toRecoverPassword,
-  getJwt,
   loginWithJwt,
   logoutJwt,
 };
