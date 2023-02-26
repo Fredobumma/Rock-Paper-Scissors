@@ -1,3 +1,5 @@
+import jwt_decode from "jwt-decode";
+import { notifySuccess, notifyError, notyf, popupInfo } from "./notifications";
 import {
   signUp,
   signIn,
@@ -22,8 +24,9 @@ import {
 window.onload = function () {
   // <----------- IMPLEMENTING ROUTING -------------->
   //variables
+  const loggedUser = authUser();
   const menu = document.getElementsByClassName("menu")[0];
-  menu.innerHTML = authUser ? Navbar_authUser() : Navbar_guest();
+  menu.innerHTML = loggedUser ? Navbar_authUser() : Navbar_guest();
 
   const links = document.getElementsByTagName("a");
   const backButton = document.getElementsByClassName("back-button");
@@ -52,14 +55,14 @@ window.onload = function () {
   const handleLocation = () => {
     const pathname = window.location.pathname;
     const path =
-      !authUser && pathname in registeredRoutes ? "/login" : pathname;
+      !loggedUser && pathname in registeredRoutes ? "/login" : pathname;
 
     const route =
       registeredRoutes[path] || routes[path] || routes["/not-found"];
 
     const urlPath = route === routes["/not-found"] ? "/not-found" : path;
 
-    if (authUser && !(path in registeredRoutes)) {
+    if (loggedUser && !(path in registeredRoutes)) {
       logoutJwt();
       window.location.reload();
     }
@@ -177,6 +180,7 @@ window.onload = function () {
       getAuthService: (target) => signIn(target[0].value, target[1].value),
     },
   ];
+  const checkbox = document.getElementById("checkbox");
   const logOut = document.getElementsByClassName("log-out");
 
   //functions for different operations
@@ -185,25 +189,22 @@ window.onload = function () {
     const { target } = event;
 
     try {
+      popupInfo("please wait");
       const { user } = await formTypes
         .find((el) => forms[0].classList.contains(el.nameId))
         .getAuthService(target);
 
       currentUser = user;
+
+      if (forms[0].classList.contains("sign-up"))
+        await updateUser(currentUser, { displayName: target[0].value });
     } catch (error) {
-      console.log(error.code);
+      notyf.dismissAll();
+      setTimeout(() => notifyError(error.code), 1000);
       return;
     }
 
-    if (forms[0].classList.contains("sign-up")) {
-      try {
-        await updateUser(currentUser, { displayName: target[0].value });
-      } catch (error) {
-        console.log(error.code);
-        return;
-      }
-    }
-
+    notyf.dismissAll();
     loginWithJwt(currentUser.accessToken);
     return currentUser;
   };
@@ -213,7 +214,10 @@ window.onload = function () {
     const user = await callServer(event);
     if (!user) return;
 
-    navigate("replace", "/");
+    setTimeout(() => {
+      notifySuccess("login success");
+      navigate("replace", "/");
+    }, 1000);
   };
 
   const changePassword = async (event) => {
@@ -226,24 +230,34 @@ window.onload = function () {
       // user.password = target[2].value;
       await passwordUpdate(user, event.target[2].value);
     } catch (error) {
-      console.log(error.code);
+      notyf.dismissAll();
+      setTimeout(() => notifyError(error.code), 1000);
       return;
     }
 
-    window.history.back();
+    setTimeout(() => {
+      notifySuccess("reset success");
+      navigate("replace", "/");
+    }, 1000);
   };
 
   const passwordRecovery = async (event) => {
     event.preventDefault();
 
     try {
+      popupInfo("please wait");
       await toRecoverPassword(event.target[0].value);
+      notyf.dismissAll();
     } catch (error) {
-      console.log(error.code);
+      notyf.dismissAll();
+      setTimeout(() => notifyError(error.code), 1000);
       return;
     }
 
-    navigate("push", "/login");
+    setTimeout(() => {
+      notifySuccess("recovery email sent");
+      navigate("push", "/login");
+    }, 1000);
   };
 
   const deleteAccount = async (event) => {
@@ -252,21 +266,46 @@ window.onload = function () {
     try {
       const user = await callServer(event);
       if (!user) return;
-      if (user.accessToken !== authUser)
-        return console.log("Wrong account credentials");
+
+      const { email: inputEmail } = jwt_decode(user.accessToken);
+      const { email: currentEmail } = jwt_decode(loggedUser);
+
+      if (inputEmail !== currentEmail) {
+        notyf.dismissAll();
+        setTimeout(() => notifyError("wrong account credentials"), 1000);
+        return;
+      }
 
       await user.delete();
       logoutJwt();
     } catch (error) {
-      console.log(error.code);
+      notyf.dismissAll();
+      setTimeout(() => notifyError(error.code), 1000);
       return;
     }
 
-    navigate("replace", "/register");
+    setTimeout(() => {
+      notifySuccess("account deleted");
+      navigate("replace", "/register");
+    }, 1000);
+  };
+
+  const passwordVisibility = () => {
+    const passwords = [
+      document.getElementById("password"),
+      document.getElementById("new-password"),
+    ];
+    passwords
+      .filter((el) => el)
+      .forEach((el) => {
+        if (el && el.type === "password") return (el.type = "text");
+        el.type = "password";
+      });
   };
 
   const handleLogOut = () => {
     logoutJwt();
+    notifySuccess("logout success");
     navigate("replace", "/login");
   };
 
@@ -289,4 +328,5 @@ window.onload = function () {
   Array.from(logOut).forEach((out) =>
     out.addEventListener("click", handleLogOut)
   );
+  checkbox && checkbox.addEventListener("click", passwordVisibility);
 };

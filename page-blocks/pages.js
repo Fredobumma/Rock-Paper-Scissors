@@ -37,9 +37,11 @@ export function Login() {
     <input
       id="email"
       class="input"
-      type="text"
+      type="email"
       placeholder=" "
       autocomplete="email"
+      autofocus
+      required
     />
     <div class="cut"></div>
     <label for="email" class="placeholder">Email</label>
@@ -51,16 +53,22 @@ export function Login() {
       type="password"
       placeholder=" "
       autocomplete="current-password"
+      minlength="8"
+      maxlength="15"      
+      required
     />
     <div class="cut"></div>
     <label for="password" class="placeholder">Password</label>
+  </div>
+  <div class="checkbox__container">
+    <input type="checkbox" id="checkbox"/>
+    <label class="checkbox" for="checkbox">Show Password</label>
   </div>
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
   <p><a href="/password-recovery">Forgot Password?</a></p>
   <p><a href="/register">Don't have an account? Register!</a></p>
-  <p><a href="/">Play as guest...</a></p>
 </aside>`;
 }
 
@@ -75,6 +83,10 @@ export function Register() {
       type="text"
       placeholder=" "
       autocomplete="username"
+      minlength="3"
+      maxlength="15"   
+      autofocus
+      required
     />
     <div class="cut"></div>
     <label for="username" class="placeholder">Username</label>
@@ -83,29 +95,36 @@ export function Register() {
     <input
       id="email"
       class="input"
-      type="text"
+      type="email"
       placeholder=" "
       autocomplete="email"
+      required
     />
     <div class="cut cut-short"></div>
     <label for="email" class="placeholder">Email</label>
   </div>
   <div class="input-container ic2">
     <input
-      id="password"
+      id="new-password"
       class="input"
       type="password"
       placeholder=" "
       autocomplete="new-password"
+      minlength="8"
+      maxlength="15"      
+      required
     />
     <div class="cut"></div>
     <label for="password" class="placeholder">Password</label>
+  </div>
+  <div class="checkbox__container">
+    <input type="checkbox" id="checkbox"/>
+    <label class="checkbox" for="checkbox">Show Password</label>
   </div>
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
   <p><a href="/login">Already have an account? Login!</a></p>
-  <p><a href="/">Play as guest...</a></p>
 </aside>`;
 }
 
@@ -116,9 +135,11 @@ export function ResetPassword() {
     <input
       id="email"
       class="input"
-      type="text"
+      type="email"
       placeholder=" "
       autocomplete="email"
+      autofocus
+      required
     />
     <div class="cut"></div>
     <label for="email" class="placeholder">Email</label>
@@ -130,6 +151,9 @@ export function ResetPassword() {
       type="password"
       placeholder=" "
       autocomplete="current-password"
+      minlength="8"
+      maxlength="15"      
+      required
     />
     <div class="cut"></div>
     <label for="password" class="placeholder">Current Password</label>
@@ -141,14 +165,21 @@ export function ResetPassword() {
       type="password"
       placeholder=" "
       autocomplete="new-password"
+      minlength="8"
+      maxlength="15"      
+      required
     />
     <div class="cut"></div>
     <label for="repeat-password" class="placeholder">New Password</label>
   </div>
+  <div class="checkbox__container">
+    <input type="checkbox" id="checkbox"/>
+    <label class="checkbox" for="checkbox">Show Password(s)</label>
+  </div>
   <button type="submit" class="submit">submit</button>
 </form>
 <aside>
-  <p class="back-button">Go back</p>
+  <p><a class="back-button">Go back</a></p>
 </aside>`;
 }
 
@@ -160,9 +191,11 @@ export function RecoverPassword() {
     <input
       id="email"
       class="input"
-      type="text"
+      type="email"
       placeholder=" "
       autocomplete="email"
+      autofocus
+      required
     />
     <div class="cut"></div>
     <label for="email" class="placeholder">Email</label>
@@ -170,7 +203,7 @@ export function RecoverPassword() {
   <button type="submit" class="submit">Reset Password</button>
 </form>
 <aside>
-  <p class="back-button">Go back</p>
+  <p><a class="back-button">Go back</a></p>
 </aside>`;
 }
 
@@ -183,9 +216,11 @@ export function DeleteCurrentUser() {
     <input
       id="email"
       class="input"
-      type="text"
+      type="email"
       placeholder=" "
       autocomplete="email"
+      autofocus
+      required
     />
     <div class="cut"></div>
     <label for="email" class="placeholder">Email</label>
@@ -197,14 +232,21 @@ export function DeleteCurrentUser() {
       type="password"
       placeholder=" "
       autocomplete="current-password"
+      minlength="8"
+      maxlength="15"      
+      required
     />
     <div class="cut"></div>
     <label for="password" class="placeholder">Password</label>
   </div>
+  <div class="checkbox__container">
+    <input type="checkbox" id="checkbox"/>
+    <label class="checkbox" for="checkbox">Show Password</label>
+  </div>
   <button type="submit" class="submit">DELETE ACCOUNT</button>
 </form>
 <aside>
-  <p class="back-button">Go back</p>
+  <p><a class="back-button">Go back</a></p>
 </aside>`;
 }
 

@@ -307,6 +307,19 @@ details[open]::before {
   margin-top: 10px;
 }
 
+.checkbox__container {
+  align-items: start;
+  display: flex;
+  justify-content: end;
+  margin: 1.5rem 0.5rem 0;
+}
+
+.checkbox {
+  color: white;
+  font-size: 1.2rem;
+  padding-left: 1rem;
+}
+
 .input-container {
   height: 50px;
   position: relative;
@@ -450,4 +463,22 @@ aside a:active,
   font-size: 3rem;
   font-weight: 600;
   padding-bottom: 15rem;
+}
+
+/* NOTIFICATION */
+.notifications {
+  border-radius: 1.5rem !important;
+  margin-top: 5.5rem;
+}
+
+.notification-info {
+  border: 2px solid white;
+}
+
+.notification-info .notyf__wrapper {
+  padding-right: 0 !important;
+}
+
+.notyf__message::first-letter {
+  text-transform: capitalize;
 }
