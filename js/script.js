@@ -45,8 +45,7 @@ window.onload = function () {
   const route = (event) => {
     event = event || window.event;
     event.preventDefault();
-    window.history.pushState({}, "", event.target.href);
-    window.location.reload();
+    navigate("push", event.target.href);
     handleLocation();
   };
 
@@ -71,12 +70,18 @@ window.onload = function () {
   handleLocation();
 
   const handleBack = () => {
-    window.history.pushState({}, "", "/");
-    window.location.reload();
+    navigate("push", "/");
   };
 
   const handlePopState = () => {
     handleLocation();
+    window.location.reload();
+  };
+
+  const navigate = (stateType, destination) => {
+    if (stateType === "push") window.history.pushState({}, "", destination);
+    else window.history.replaceState({}, "", destination);
+
     window.location.reload();
   };
 
@@ -208,8 +213,7 @@ window.onload = function () {
     const user = await callServer(event);
     if (!user) return;
 
-    window.history.replaceState({}, "", "/");
-    window.location.reload();
+    navigate("replace", "/");
   };
 
   const changePassword = async (event) => {
@@ -239,8 +243,7 @@ window.onload = function () {
       return;
     }
 
-    window.history.pushState({}, "", "/login");
-    window.location.reload();
+    navigate("push", "/login");
   };
 
   const deleteAccount = async (event) => {
@@ -259,14 +262,12 @@ window.onload = function () {
       return;
     }
 
-    window.history.replaceState({}, "", "/register");
-    window.location.reload();
+    navigate("replace", "/register");
   };
 
   const handleLogOut = () => {
     logoutJwt();
-    window.history.replaceState({}, "", "/login");
-    window.location.reload();
+    navigate("replace", "/login");
   };
 
   //event listener
