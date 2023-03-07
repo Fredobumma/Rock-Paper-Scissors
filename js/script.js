@@ -1,5 +1,4 @@
 import jwt_decode from "jwt-decode";
-import { notifySuccess, notifyError, notyf, popupInfo } from "./notifications";
 import {
   signUp,
   signIn,
@@ -10,6 +9,8 @@ import {
   loginWithJwt,
   logoutJwt,
 } from "./services/authService";
+import { deleteData, setData } from "./services/httpService";
+import { notifySuccess, notifyError, notyf, popupInfo } from "./notifications";
 import { Navbar_guest, Navbar_authUser } from "./../page-blocks/navbar";
 import {
   Home,
@@ -185,19 +186,27 @@ window.onload = function () {
 
   //functions for different operations
   const callServer = async (event) => {
+    popupInfo("please wait");
     let currentUser;
     const { target } = event;
 
     try {
-      popupInfo("please wait");
       const { user } = await formTypes
         .find((el) => forms[0].classList.contains(el.nameId))
         .getAuthService(target);
 
       currentUser = user;
+      const { email } = currentUser;
 
       if (forms[0].classList.contains("sign-up"))
         await updateUser(currentUser, { displayName: target[0].value });
+
+      await setData("users", email, {
+        displayName: currentUser.displayName,
+        email,
+        password:
+          target[2].value.length >= 8 ? target[2].value : target[1].value,
+      });
     } catch (error) {
       notyf.dismissAll();
       setTimeout(() => notifyError(error.code), 1000);
@@ -222,13 +231,14 @@ window.onload = function () {
 
   const changePassword = async (event) => {
     event.preventDefault();
+    const { target } = event;
 
     try {
       const user = await callServer(event);
       if (!user) return;
 
-      // user.password = target[2].value;
-      await passwordUpdate(user, event.target[2].value);
+      await passwordUpdate(user, target[2].value);
+      await setData("users", user.email, { password: target[2].value });
     } catch (error) {
       notyf.dismissAll();
       setTimeout(() => notifyError(error.code), 1000);
@@ -243,9 +253,9 @@ window.onload = function () {
 
   const passwordRecovery = async (event) => {
     event.preventDefault();
+    popupInfo("please wait");
 
     try {
-      popupInfo("please wait");
       await toRecoverPassword(event.target[0].value);
       notyf.dismissAll();
     } catch (error) {
@@ -277,6 +287,7 @@ window.onload = function () {
       }
 
       await user.delete();
+      await deleteData("users", currentEmail);
       logoutJwt();
     } catch (error) {
       notyf.dismissAll();

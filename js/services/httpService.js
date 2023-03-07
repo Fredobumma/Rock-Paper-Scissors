@@ -1,7 +1,7 @@
-// Import the functions you need from the SDKs you need
+// <--------- Import the functions you need from the SDKs you need --------->
 import { initializeApp } from "firebase/app";
 // import { getAnalytics, logEvent } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, setDoc, deleteDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const {
@@ -14,7 +14,6 @@ const {
   APP_ID,
   MEASUREMENT_ID,
 } = process.env;
-console;
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -30,10 +29,26 @@ const firebaseConfig = {
   measurementId: MEASUREMENT_ID,
 };
 
-// Initialize Firebase
+// <--------- Initialize Firebase --------->
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+/* const analytics = getAnalytics(app); */
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { auth, db };
+// <--------- C-R-U-D Operations --------->
+// const addData = (document, data) => addDoc(collection(db, document), data);
+
+const setData = (document, _id, data) =>
+  setDoc(doc(db, document, _id), data, { merge: true });
+
+// const getData = (document, _id) => getDoc(doc(db, document, _id));
+
+// const getAllData = (document) =>
+//   getDocs(collection(db, document)).forEach((_doc) => {
+//     /* doc.data() is never undefined for query doc snapshots
+//     console.log(doc.id, " => ", doc.data()); */
+//   });
+
+const deleteData = (document, _id) => deleteDoc(doc(db, document, _id));
+
+export { auth, setData, deleteData };
