@@ -19,7 +19,7 @@ const notifySuccess = (message) =>
   notyf.success({
     className: "notifications",
     dismissible: true,
-    message: `${message}`,
+    message,
   });
 
 const notifyError = (message) =>
@@ -31,7 +31,7 @@ const notifyError = (message) =>
   });
 
 const popupInfo = (message) =>
-  notyf.open({ type: "info", message: `${message}`, duration: 0 });
+  notyf.open({ type: "info", message, duration: 0 });
 
 // const dismissNotifications = notyf.dismissAll();
 

@@ -18,16 +18,42 @@ body {
 }
 
 #main-page {
-  margin: 8rem 0;
+  margin: 5rem 0;
 }
 
 p {
   font-size: 2rem;
 }
 
+.score-board {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.4rem;
+  font-weight: 600;
+  gap: 1rem;
+  justify-content: end;
+  margin: auto 2rem 7rem auto;
+  width: 80%;
+}
+
+#high-score {
+  background-color: black;
+  border-radius: 1rem;
+  color: white;
+  font-weight: 700;
+  max-width: 100%;
+  padding: 0.5rem 1rem;
+  word-wrap: break-word;
+}
+
 .heading {
-  color: blue;
-  margin: 0 0 4rem;
+  background-color: black;
+  border-radius: 1rem;
+  color: white;
+  display: inline-block;
+  margin: 0 0 6rem;
+  padding: 1rem 2rem;
 }
 
 .input-selections {
@@ -283,12 +309,16 @@ details[open]::before {
 }
 
 /* FORMS */
+.form-container {
+  margin-top: 10rem;
+}
+
 .form {
   background-color: #000000;
   border-radius: 20px;
   box-sizing: border-box;
   height: fit-content;
-  margin: 0 auto 5rem;
+  margin: 5rem auto 5rem;
   max-width: 300px;
   padding: 20px;
 }
@@ -445,6 +475,7 @@ aside a:active,
 .delete-instructions:nth-of-type(1) {
   color: red;
   margin-bottom: 1rem;
+  margin-top: -2rem;
   text-decoration: underline;
   text-underline-offset: 0.3rem;
 }
@@ -468,8 +499,8 @@ aside a:active,
 /* NOTIFICATION */
 .notifications {
   border-radius: 1.5rem !important;
-  display: inline-block;
-  margin-top: 5.5rem;
+  margin-top: 8rem;
+  max-width: fit-content !important;
 }
 
 .notification-info {
