@@ -1,6 +1,12 @@
 export function Home() {
-  return `<header>
-  <div class="score-board"><span class="user">Skywalker</span><span id="high-score">1 : 0</span><span>Comp</span></div>
+  return ` <header>
+  <div class="score-board">
+    <span id="user">UserName</span>
+    <span id="scores"
+      ><span id="user-score">0</span> :
+      <span id="comp-score">0</span> </span
+    ><span>Comp</span>
+  </div>
   <h1 class="heading">Rock, Paper, Scissors</h1>
 </header>
 <section>

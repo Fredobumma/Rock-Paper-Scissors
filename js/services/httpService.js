@@ -1,7 +1,13 @@
 // <--------- Import the functions you need from the SDKs you need --------->
 import { initializeApp } from "firebase/app";
 // import { getAnalytics, logEvent } from "firebase/analytics";
-import { getFirestore, doc, setDoc, deleteDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const {
@@ -41,7 +47,7 @@ const db = getFirestore(app);
 const setData = (document, _id, data) =>
   setDoc(doc(db, document, _id), data, { merge: true });
 
-// const getData = (document, _id) => getDoc(doc(db, document, _id));
+const getData = (document, _id) => getDoc(doc(db, document, _id));
 
 // const getAllData = (document) =>
 //   getDocs(collection(db, document)).forEach((_doc) => {
@@ -51,4 +57,4 @@ const setData = (document, _id, data) =>
 
 const deleteData = (document, _id) => deleteDoc(doc(db, document, _id));
 
-export { auth, setData, deleteData };
+export { auth, getData, setData, deleteData };

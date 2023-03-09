@@ -5,7 +5,7 @@ export function Navbar_guest() {
 
 export function Navbar_authUser() {
   return `<a href="/">Home</a>
-  <a href="#">Reset Score</a>
+  <a class="reset-score">Reset Score</a>
   <a href="/reset-password">Reset Password</a>
   <a class="log-out">Log-Out</a>
   <a href="/delete-account">Delete Account</a>`;
