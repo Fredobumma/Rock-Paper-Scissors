@@ -20,7 +20,7 @@ import {
   RecoverPassword,
   DeleteCurrentUser,
   NotFound,
-} from "../page-blocks/pages.js";
+} from "../page-blocks/pages";
 import { addScore } from "./utilities";
 
 window.onload = function () {
@@ -93,8 +93,7 @@ window.onload = function () {
   //event listener
   window.onpopstate = handlePopState;
   Array.from(links).map(
-    (link) =>
-      link.innerText !== "Reset Score" && link.addEventListener("click", route)
+    (link) => link.href && link.addEventListener("click", route)
   );
   Array.from(backButton).map((button) =>
     button.addEventListener("click", handleBack)
@@ -119,7 +118,7 @@ window.onload = function () {
   const secondScore = document.getElementById("comp-score");
 
   const handleScores = async () => {
-    popupInfo("loading game data, Please wait...");
+    popupInfo("Please Wait ◴ loading game data");
     username.innerText = loggedUser.name;
 
     try {
@@ -232,6 +231,7 @@ window.onload = function () {
 
     localStorage.setItem("user-score", 0);
     localStorage.setItem("comp-score", 0);
+    location.reload();
   };
 
   //event listener
@@ -415,4 +415,26 @@ window.onload = function () {
     out.addEventListener("click", handleLogOut)
   );
   checkbox && checkbox.addEventListener("click", passwordVisibility);
+
+  // <------------- IMPLEMEMTING NOTIFICATION INFO ---------------->
+  const popUp = document.getElementsByClassName("new-information");
+  const modal = document.getElementById("modal-wrapper");
+  const closeModal = document.getElementsByClassName("close");
+
+  //functions for different operations
+  const handlePopUp = () => {
+    modal.style.display = "block";
+    wrapper.classList.remove("is-open");
+    details.open = false;
+  };
+
+  const closePopUp = () => (modal.style.display = "none");
+
+  //event listener
+  Array.from(popUp).map((el) => (el.onclick = handlePopUp));
+  Array.from(closeModal).map((el) => (el.onclick = closePopUp));
+
+  window.onclick = (event) => {
+    if (event.target == modal) closePopUp();
+  };
 };

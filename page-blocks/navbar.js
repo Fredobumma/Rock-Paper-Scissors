@@ -5,6 +5,7 @@ export function Navbar_guest() {
 
 export function Navbar_authUser() {
   return `<a href="/">Home</a>
+  <a class="new-information">Notification<span class="info-icon"></span></a>
   <a class="reset-score">Reset Score</a>
   <a href="/reset-password">Reset Password</a>
   <a class="log-out">Log-Out</a>

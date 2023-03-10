@@ -76,6 +76,10 @@ p {
   padding: 1.5rem;
 }
 
+.rock {
+  height: 3.3rem;
+}
+
 .players-container {
   display: flex;
   gap: 0 4rem;
@@ -99,9 +103,9 @@ p {
   border-radius: 5rem;
   cursor: default;
   font-size: 3rem;
-  min-height: 3.5rem;
+  min-height: 3.8rem;
   margin: 1.5rem 0 7rem;
-  min-width: 3.5rem;
+  min-width: 3.8rem;
   padding: 2rem;
 }
 
@@ -290,6 +294,15 @@ details[open]::before {
   top: 0;
   width: 100%;
   z-index: 10;
+}
+
+.info-icon {
+  display: inline-block;
+  background-color: rgb(233, 21, 21);
+  border-radius: 1rem;
+  height: 1rem;
+  margin-left: 1rem;
+  width: 1rem;
 }
 
 @keyframes menuAnim {
@@ -517,4 +530,57 @@ aside a:active,
 
 .notyf__message::first-letter {
   text-transform: capitalize;
+}
+
+/*  INFORMATION POPUP */
+.modal {
+  background-color: rgba(31, 32, 41, 0.75);
+  box-shadow: 0 12px 25px 0 rgba(199, 175, 189, 0.25);
+  display: none;
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  padding-top: 20rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #000;
+  border: 2px solid #888;
+  border-radius: 2rem;
+  color: white;
+  margin: auto;
+  padding: 2rem 2rem 4rem;
+  width: 80%;
+}
+
+.modal-content h2 {
+  color: rgb(233, 21, 21);
+  font-size: 2rem;
+  line-height: 4rem;
+  margin: 3rem 0;
+  text-decoration: underline;
+  text-decoration-color: white;
+  text-underline-offset: 1rem;
+}
+
+.modal-content p {
+  margin-bottom: 2rem;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  cursor: pointer;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: rgb(233, 21, 21);
 }
