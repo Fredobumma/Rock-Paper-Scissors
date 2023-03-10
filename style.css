@@ -547,7 +547,6 @@ aside a:active,
   z-index: 1;
 }
 
-/* Modal Content */
 .modal-content {
   background-color: #000;
   border: 2px solid #888;
@@ -572,7 +571,6 @@ aside a:active,
   margin-bottom: 2rem;
 }
 
-/* The Close Button */
 .close {
   color: white;
   cursor: pointer;

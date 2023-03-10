@@ -12,16 +12,15 @@ import { deleteData, getData, setData } from "./services/httpService";
 import { notifySuccess, notifyError, notyf, popupInfo } from "./notifications";
 import { useJwtDecode } from "./useJwtDecode";
 import { Navbar_guest, Navbar_authUser } from "./../page-blocks/navbar";
+import { route, handleLocation, navigate } from "./routing";
 import {
-  Home,
-  Login,
-  Register,
-  ResetPassword,
-  RecoverPassword,
-  DeleteCurrentUser,
-  NotFound,
-} from "../page-blocks/pages";
-import { addScore } from "./utilities";
+  addScore,
+  computerChoice,
+  getComputerScore,
+  getUserScore,
+  removeScores,
+  setScores,
+} from "./utilities";
 
 window.onload = function () {
   // <----------- IMPLEMENTING ROUTING -------------->
@@ -33,71 +32,24 @@ window.onload = function () {
   const links = document.getElementsByTagName("a");
   const backButton = document.getElementsByClassName("back-button");
 
-  const routes = {
-    "/login": Login(),
-    "/register": Register(),
-    "/password-recovery": RecoverPassword(),
-    "/not-found": NotFound(),
-  };
-
-  const registeredRoutes = {
-    "/": Home(),
-    "/reset-password": ResetPassword(),
-    "/delete-account": DeleteCurrentUser(),
-  };
-
   //functions for different operations
-  const route = (event) => {
-    event = event || window.event;
-    event.preventDefault();
-    navigate("push", event.target.href);
-    handleLocation();
-  };
-
-  const handleLocation = () => {
-    const pathname = window.location.pathname;
-    const path =
-      !loggedUser && pathname in registeredRoutes ? "/login" : pathname;
-
-    const route =
-      registeredRoutes[path] || routes[path] || routes["/not-found"];
-
-    const urlPath = route === routes["/not-found"] ? "/not-found" : path;
-
-    if (loggedUser && !(path in registeredRoutes)) {
-      logoutJwt();
-      window.location.reload();
-    }
-
-    window.history.pushState({}, "", urlPath);
-    document.getElementById("main-page").innerHTML = route;
-  };
-  handleLocation();
+  handleLocation(loggedUser);
 
   const handleBack = () => {
     navigate("push", "/");
   };
 
   const handlePopState = () => {
-    handleLocation();
-    window.location.reload();
-  };
-
-  const navigate = (stateType, destination) => {
-    if (stateType === "push") window.history.pushState({}, "", destination);
-    else window.history.replaceState({}, "", destination);
-
+    handleLocation(loggedUser);
     window.location.reload();
   };
 
   //event listener
   window.onpopstate = handlePopState;
-  Array.from(links).map(
-    (link) => link.href && link.addEventListener("click", route)
-  );
-  Array.from(backButton).map((button) =>
-    button.addEventListener("click", handleBack)
-  );
+  Array.from(links).map((link) => {
+    link.href && link.addEventListener("click", () => route(e, loggedUser));
+  });
+  Array.from(backButton).map((button) => (button.onclick = handleBack));
 
   // <-------------- IMPLEMENTING NAVBAR ------------->
   //variables
@@ -106,11 +58,11 @@ window.onload = function () {
   const summary = document.getElementsByTagName("summary")[0];
 
   //event listener
-  wrapper.addEventListener("click", () => {
+  wrapper.onclick = () => {
     wrapper.classList.remove("is-open");
     details.open = false;
-  });
-  summary.addEventListener("click", () => wrapper.classList.toggle("is-open"));
+  };
+  summary.onclick = () => wrapper.classList.toggle("is-open");
 
   // <--------------- IMPLEMENTING GAME SCORE -------------->
   const username = document.getElementById("user");
@@ -118,20 +70,19 @@ window.onload = function () {
   const secondScore = document.getElementById("comp-score");
 
   const handleScores = async () => {
-    popupInfo("Please Wait ◴ loading game data");
-    username.innerText = loggedUser.name;
+    popupInfo("Please Wait ◕ loading game data");
 
     try {
       const dataObj = await getData("users", loggedUser.email);
-      const { userScore, computerScore } = dataObj.exists()
+      const { displayName, userScore, computerScore } = dataObj.exists()
         ? dataObj.data()
         : {};
-      localStorage.setItem("user-score", userScore || 0);
-      localStorage.setItem("comp-score", computerScore || 0);
 
-      // TODO: refactor here
-      firstScore.innerText = localStorage.getItem("user-score");
-      secondScore.innerText = localStorage.getItem("comp-score");
+      setScores(userScore || 0, computerScore || 0);
+
+      username.innerText = displayName;
+      firstScore.innerText = getUserScore();
+      secondScore.innerText = getComputerScore();
     } catch (error) {
       notyf.dismissAll();
       setTimeout(() => notifyError(error.code), 1000);
@@ -176,16 +127,13 @@ window.onload = function () {
     return "You Win 😁";
   };
 
-  const computer = (optionValues) =>
-    optionValues[Math.floor(Math.random() * optionValues.length)];
-
   const handleOptionPick = async (option) => {
     if (playerOne.innerHTML) return null;
 
     const optionsArray = Array.from(options).map((opt) => opt.innerHTML);
 
     playerOne.innerHTML = option.innerHTML;
-    playerTwo.innerHTML = computer(optionsArray);
+    playerTwo.innerHTML = computerChoice(optionsArray);
     const output = handleGameResult(optionsArray);
     result.innerText = output;
 
@@ -194,8 +142,8 @@ window.onload = function () {
 
     try {
       await setData("users", loggedUser.email, {
-        userScore: localStorage.getItem("user-score"),
-        computerScore: localStorage.getItem("comp-score"),
+        userScore: getUserScore(),
+        computerScore: getComputerScore(),
       });
     } catch (error) {
       notyf.dismissAll();
@@ -203,11 +151,8 @@ window.onload = function () {
       return;
     }
 
-    if (output === "You Win 😁")
-      firstScore.innerText = localStorage.getItem("user-score");
-
-    if (output === "You Lose 😪")
-      secondScore.innerText = localStorage.getItem("comp-score");
+    if (output === "You Win 😁") firstScore.innerText = getUserScore();
+    if (output === "You Lose 😪") secondScore.innerText = getComputerScore();
   };
 
   const handleGameReset = () => {
@@ -229,18 +174,15 @@ window.onload = function () {
       return;
     }
 
-    localStorage.setItem("user-score", 0);
-    localStorage.setItem("comp-score", 0);
+    setScores(0, 0);
     location.reload();
   };
 
   //event listener
-  Array.from(options).map((option) =>
-    option.addEventListener("click", () => handleOptionPick(option))
+  Array.from(options).map(
+    (option) => (option.onclick = () => handleOptionPick(option))
   );
-  Array.from(resetScore).map((el) =>
-    el.addEventListener("click", handleResetScore)
-  );
+  Array.from(resetScore).map((el) => (el.onclick = handleResetScore));
   newGame && newGame.addEventListener("click", handleGameReset);
 
   // <-------------- IMPLEMENTING AUTH ---------------->
@@ -360,8 +302,9 @@ window.onload = function () {
       }
 
       await user.delete();
-      await deleteData("users", currentEmail);
+      await deleteData("users", loggedUser.email);
       logoutJwt();
+      removeScores();
     } catch (error) {
       notyf.dismissAll();
       setTimeout(() => notifyError(error.code), 1000);
@@ -389,8 +332,7 @@ window.onload = function () {
 
   const handleLogOut = () => {
     logoutJwt();
-    localStorage.removeItem("user-score");
-    localStorage.removeItem("comp-score");
+    removeScores();
     notifySuccess("logout success");
     navigate("replace", "/login");
   };
@@ -406,14 +348,9 @@ window.onload = function () {
     const listener = eventListeners.find((el) =>
       form.classList.contains(el.nameId)
     );
-    form.addEventListener(
-      "submit",
-      listener ? listener.func : handleSign_Up_In
-    );
+    form.onsubmit = listener ? listener.func : handleSign_Up_In;
   });
-  Array.from(logOut).forEach((out) =>
-    out.addEventListener("click", handleLogOut)
-  );
+  Array.from(logOut).forEach((el) => (el.onclick = handleLogOut));
   checkbox && checkbox.addEventListener("click", passwordVisibility);
 
   // <------------- IMPLEMEMTING NOTIFICATION INFO ---------------->

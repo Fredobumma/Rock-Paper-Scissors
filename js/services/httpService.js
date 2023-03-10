@@ -42,18 +42,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // <--------- C-R-U-D Operations --------->
-// const addData = (document, data) => addDoc(collection(db, document), data);
-
 const setData = (document, _id, data) =>
   setDoc(doc(db, document, _id), data, { merge: true });
 
 const getData = (document, _id) => getDoc(doc(db, document, _id));
-
-// const getAllData = (document) =>
-//   getDocs(collection(db, document)).forEach((_doc) => {
-//     /* doc.data() is never undefined for query doc snapshots
-//     console.log(doc.id, " => ", doc.data()); */
-//   });
 
 const deleteData = (document, _id) => deleteDoc(doc(db, document, _id));
 
