@@ -12,7 +12,3 @@ Routing,
 Authentication using firebase authentication services,
 data storage using firestore (for tracking a specific user's highscore),
 various games.
-
-# Currently under development...
-
-TODO: handling errors from requests and data storage implementation
