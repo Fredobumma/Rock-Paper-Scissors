@@ -1,4 +1,5 @@
 import {
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -16,6 +17,8 @@ const loginWithJwt = (value) => localStorage.setItem(tokenKey, value);
 
 const logoutJwt = () => localStorage.removeItem(tokenKey);
 
+const getUser = onAuthStateChanged;
+
 const signUp = (email, password) =>
   createUserWithEmailAndPassword(auth, email, password);
 
@@ -31,6 +34,8 @@ const updateUser = (currentUser, newUserObj) =>
 const toRecoverPassword = (email) => sendPasswordResetEmail(auth, email);
 
 export {
+  auth,
+  getUser,
   getJwt,
   signUp,
   signIn,

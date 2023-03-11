@@ -21,6 +21,8 @@ const registeredRoutes = {
   "/delete-account": DeleteCurrentUser(),
 };
 
+export const checkRoute = (pathname) => pathname in registeredRoutes;
+
 export const route = (event, loggedUser) => {
   event = event || window.event;
   event.preventDefault();

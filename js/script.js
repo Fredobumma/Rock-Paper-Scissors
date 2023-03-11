@@ -1,4 +1,6 @@
 import {
+  auth,
+  getUser,
   signUp,
   signIn,
   getJwt,
@@ -12,7 +14,7 @@ import { deleteData, getData, setData } from "./services/httpService";
 import { notifySuccess, notifyError, notyf, popupInfo } from "./notifications";
 import { useJwtDecode } from "./useJwtDecode";
 import { Navbar_guest, Navbar_authUser } from "./../page-blocks/navbar";
-import { route, handleLocation, navigate } from "./routing";
+import { checkRoute, route, handleLocation, navigate } from "./routing";
 import {
   addScore,
   computerChoice,
@@ -23,6 +25,13 @@ import {
 } from "./utilities";
 
 window.onload = function () {
+  // <----------- VERIFY USER ACROSS ALL DEVICES -------------->
+  const verifyUser = () =>
+    getUser(auth, (user) => {
+      if (checkRoute(location.pathname) && !user) handleLogOut();
+    });
+  verifyUser();
+
   // <----------- IMPLEMENTING ROUTING -------------->
   //variables
   const loggedUser = getJwt() ? useJwtDecode(getJwt()) : null;
@@ -90,7 +99,7 @@ window.onload = function () {
     notyf.dismissAll();
   };
 
-  window.location.pathname === "/" && handleScores();
+  location.pathname === "/" && handleScores();
 
   // <--------------- IMPLEMENTING GAME PAGE -------------->
   //variables
@@ -131,9 +140,9 @@ window.onload = function () {
     if (playerOne.innerHTML) return null;
 
     const optionsArray = Array.from(options).map((opt) => opt.innerHTML);
-
     playerOne.innerHTML = option.innerHTML;
     playerTwo.innerHTML = computerChoice(optionsArray);
+
     const output = handleGameResult(optionsArray);
     result.innerText = output;
 
