@@ -298,11 +298,34 @@ details[open]::before {
 
 .info-icon {
   display: inline-block;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.info-icon,
+.info-icon::after {
   background-color: rgb(233, 21, 21);
   border-radius: 1rem;
   height: 1rem;
-  margin-left: 1rem;
   width: 1rem;
+}
+
+.info-icon::after {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  bottom: 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
 
 @keyframes menuAnim {
